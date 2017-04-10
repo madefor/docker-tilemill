@@ -5,8 +5,8 @@ memory: 2048
 uri: /map/
 
 packages:
-  - apache2
-  - apache2-dev
+  # - apache2
+  # - apache2-dev
   - autoconf
   - curl
   - fonts-noto-cjk

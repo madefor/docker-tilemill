@@ -40,24 +40,24 @@
       path: "{{ ansible_env.HOME }}/tilemill/project/openstreetmap-carto"
       state: link
 
-  - name: Setup renderd
-    become: yes
-    replace:
-      dest: /usr/local/etc/renderd.conf
-      regexp: ^XML=.*
-      replace: "XML={{ project_dir }}/openstreetmap-carto/style.xml"
-    notify:
-      - restart-renderd
-
-  - name: Start `kosmtic` as a server
-    shell: "pm2 -f start kosmtik -- serve {{ project_dir }}/openstreetmap-carto/project.mml --host=0.0.0.0 --localconfig={{ ansible_env.HOME }}/.kosmtik.json"
-    args:
-      chdir: "{{ ansible_env.HOME }}"
-
-  handlers:
-    - name: restart-apache
-      become: yes
-      action: service name=apache2 state=restarted
-    - name: restart-renderd
-      become: yes
-      action: service name=renderd state=restarted
+  # - name: Setup renderd
+  #   become: yes
+  #   replace:
+  #     dest: /usr/local/etc/renderd.conf
+  #     regexp: ^XML=.*
+  #     replace: "XML={{ project_dir }}/openstreetmap-carto/style.xml"
+  #   notify:
+  #     - restart-renderd
+  #
+  # - name: Start `kosmtic` as a server
+  #   shell: "pm2 -f start kosmtik -- serve {{ project_dir }}/openstreetmap-carto/project.mml --host=0.0.0.0 --localconfig={{ ansible_env.HOME }}/.kosmtik.json"
+  #   args:
+  #     chdir: "{{ ansible_env.HOME }}"
+  #
+  # handlers:
+  #   - name: restart-apache
+  #     become: yes
+  #     action: service name=apache2 state=restarted
+  #   - name: restart-renderd
+  #     become: yes
+  #     action: service name=renderd state=restarted
