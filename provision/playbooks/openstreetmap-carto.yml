@@ -2,10 +2,30 @@
 - hosts: all
 
   vars:
-    osm_carto:
-      version: 3.1.0
+    project_dir: "{{ ansible_env.HOME }}/tilemill/project"
+    db:
+      name: gis
+      encoding: UTF-8
 
   tasks:
+
+  - name: Create a database `{{ db.name }}`
+    become: yes
+    become_user: postgres
+    postgresql_db:
+      name: "{{ db.name }}"
+      encoding: "{{ db.encoding }}"
+      owner: "{{ ansible_env.USER }}"
+
+  - name: Run SQL `CREATE EXTENSION IF NOT EXISTS hstore;`
+    become: yes
+    become_user: postgres
+    shell: "psql -c \"CREATE EXTENSION IF NOT EXISTS hstore;\" -d {{ db.name }}"
+
+  - name: Run SQL `CREATE EXTENSION IF NOT EXISTS postgis;`
+    become: yes
+    become_user: postgres
+    shell: "psql -c \"CREATE EXTENSION IF NOT EXISTS postgis;\" -d {{ db.name }}"
 
   # OpenStreetMap Carto
   - name: Clone the openstreetmap-carto
@@ -22,16 +42,12 @@
     shell: ./scripts/get-shapefiles.py
     args:
       chdir: "{{ project_dir }}/openstreetmap-carto"
-    notify:
-      - restart-renderd
 
   - name: Run `carto project.mml > style.xml`
     become: yes
     shell: carto project.mml > style.xml
     args:
       chdir: "{{ project_dir }}/openstreetmap-carto"
-    notify:
-      - restart-renderd
 
   - name: "Create symlink into `{{ ansible_env.HOME }}/tilemill/project/openstreetmap-carto`"
     become: yes
@@ -39,25 +55,3 @@
       src: "{{ project_dir }}/openstreetmap-carto"
       path: "{{ ansible_env.HOME }}/tilemill/project/openstreetmap-carto"
       state: link
-
-  # - name: Setup renderd
-  #   become: yes
-  #   replace:
-  #     dest: /usr/local/etc/renderd.conf
-  #     regexp: ^XML=.*
-  #     replace: "XML={{ project_dir }}/openstreetmap-carto/style.xml"
-  #   notify:
-  #     - restart-renderd
-  #
-  # - name: Start `kosmtic` as a server
-  #   shell: "pm2 -f start kosmtik -- serve {{ project_dir }}/openstreetmap-carto/project.mml --host=0.0.0.0 --localconfig={{ ansible_env.HOME }}/.kosmtik.json"
-  #   args:
-  #     chdir: "{{ ansible_env.HOME }}"
-  #
-  # handlers:
-  #   - name: restart-apache
-  #     become: yes
-  #     action: service name=apache2 state=restarted
-  #   - name: restart-renderd
-  #     become: yes
-  #     action: service name=renderd state=restarted
