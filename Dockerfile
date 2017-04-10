@@ -20,9 +20,8 @@ COPY provision /opt/provision
 RUN WORK_DIR=$(pwd)
 
 RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
-RUN echo "pipelining = True" > .ansible.cfg
 
-RUN su -l ubuntu -c bash -lc "ansible-playbook /opt/provision/playbook.yml"
+RUN ansible-playbook /opt/provision/playbook.yml
 
 RUN rm -rf /usr/share/doc && \
     rm -rf /var/lib/apt/lists/* && \
@@ -36,3 +35,4 @@ COPY initctl_faker .
 RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl
 
 EXPOSE 20009
+EXPOSE 20008

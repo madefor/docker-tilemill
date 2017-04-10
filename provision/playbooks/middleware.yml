@@ -1,10 +1,13 @@
 ---
 - hosts: all
 
+  vars:
+    tilemill:
+      ip: 127.0.0.1
+
   tasks:
 
   - name: Install common packages
-    become: yes
     apt: name={{ item }} state=latest update_cache=yes
     with_items:
       - autoconf
@@ -14,6 +17,7 @@
       - fonts-noto-unhinted
       - gdal-bin
       - git
+      - jq
       - libmapnik-dev
       - libtool
       - mapnik-utils
@@ -30,65 +34,62 @@
 
   # Node.js
   - name: Download Node.js PPM
-    become: yes
     get_url:
       url: https://deb.nodesource.com/setup_6.x
       dest: /tmp/setup.sh
       mode: 0440
   - name: Install Node.js PPM
-    become: yes
     shell: bash /tmp/setup.sh
   - name: Install Node.js
-    become: yes
     apt: name=nodejs state=latest
   - name: Install npm packages
-    become: yes
     npm:
       name: "{{ item }}"
       global: yes
       executable: /usr/bin/npm
     with_items:
       - carto
-      - kosmtik
       - pm2
-      - cartocc
 
   # Setup PostgreSQL
   - name: Make sure PostgreSQL is running
-    become: yes
     action: service name=postgresql state=started enabled=true
 
-  - name: "Create a user `{{ ansible_env.USER }}` for PostgreSQL"
+  - name: "Create a user `ubuntu` for PostgreSQL"
     become: yes
     become_user: postgres
     postgresql_user:
-      name: "{{ ansible_env.USER }}"
-      password: "{{ ansible_env.USER }}"
+      name: "ubuntu"
+      password: "ubuntu"
 
   # tilemill
   - name: Clone the TilMill
-    become: yes
     git:
       repo: https://github.com/tilemill-project/tilemill.git
       dest: /usr/local/src/tilemill
 
   - name: Install dependencies for the TilMill
-    become: yes
     shell: npm install
     args:
       chdir: /usr/local/src/tilemill
 
-  - name: Create `{{ ansible_env.HOME }}/.tilemill`
+  - name: Create `/home/ubuntu/.tilemill`
+    become: yes
+    become_user: ubuntu
     file:
-      path: "{{ ansible_env.HOME }}/.tilemill"
+      path: "/home/ubuntu/.tilemill"
       state: directory
 
   - name: Place the config for the TileMill
+    become: yes
+    become_user: ubuntu
     template:
       src: templates/tilemill.json
-      dest: "{{ ansible_env.HOME }}/.tilemill/config.json"
+      dest: "/home/ubuntu/.tilemill/config.json"
 
   - name: Start Tilemill as a server
+    become: yes
+    become_user: ubuntu
     shell: "pm2 -f  --name=tilemill start index.js"
     args:
       chdir: /usr/local/src/tilemill

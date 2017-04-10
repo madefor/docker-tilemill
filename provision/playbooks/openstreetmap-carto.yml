@@ -2,7 +2,7 @@
 - hosts: all
 
   vars:
-    project_dir: "{{ ansible_env.HOME }}/tilemill/project"
+    project_dir: "/home/ubuntu/tilemill/project"
     db:
       name: gis
       encoding: UTF-8
@@ -15,7 +15,7 @@
     postgresql_db:
       name: "{{ db.name }}"
       encoding: "{{ db.encoding }}"
-      owner: "{{ ansible_env.USER }}"
+      owner: ubuntu
 
   - name: Run SQL `CREATE EXTENSION IF NOT EXISTS hstore;`
     become: yes
@@ -29,29 +29,30 @@
 
   # OpenStreetMap Carto
   - name: Clone the openstreetmap-carto
+    become: yes
+    become_user: ubuntu
     git:
       repo: https://github.com/gravitystorm/openstreetmap-carto.git
       dest: "{{ project_dir }}/openstreetmap-carto"
       update: no
 
   - name: Import the default data
-    shell: "osm2pgsql --slim -d gis -C 3600 --cache {{ memory * 0.5 }} --hstore -S {{ project_dir }}/openstreetmap-carto/openstreetmap-carto.style {{ osm2pgsql.data }}"
+    become: yes
+    become_user: ubuntu
+    shell: "osm2pgsql --slim -d gis -C 3600 --cache 2048 --hstore -S {{ project_dir }}/openstreetmap-carto/openstreetmap-carto.style /opt/provision/default.osm"
+    args:
+      chdir: "{{ project_dir }}/openstreetmap-carto"
 
   - name: Run `./scripts/get-shapefiles.py`
     become: yes
+    become_user: ubuntu
     shell: ./scripts/get-shapefiles.py
     args:
       chdir: "{{ project_dir }}/openstreetmap-carto"
 
   - name: Run `carto project.mml > style.xml`
     become: yes
+    become_user: ubuntu
     shell: carto project.mml > style.xml
     args:
       chdir: "{{ project_dir }}/openstreetmap-carto"
-
-  - name: "Create symlink into `{{ ansible_env.HOME }}/tilemill/project/openstreetmap-carto`"
-    become: yes
-    file:
-      src: "{{ project_dir }}/openstreetmap-carto"
-      path: "{{ ansible_env.HOME }}/tilemill/project/openstreetmap-carto"
-      state: link
