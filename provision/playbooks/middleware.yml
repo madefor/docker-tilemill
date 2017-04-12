@@ -90,6 +90,6 @@
   - name: Start Tilemill as a server
     become: yes
     become_user: ubuntu
-    shell: "pm2 -f  --name=tilemill start index.js"
+    shell: "pm2 -f --name=tilemill start index.js"
     args:
       chdir: /usr/local/src/tilemill

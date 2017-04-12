@@ -2,7 +2,7 @@
 
 TileMill Server on Ubuntu 16.04
 
-![](https://www.evernote.com/l/ABWtQwn_tP1Fv5c7ZHEgYLrFgcvySIFdR4IB/image.png)
+![](https://www.evernote.com/l/ABXsEI6imwlOXrnOYxrPW4eTANUO6XnETu0B/image.png)
 
 ## What's Installed
 
@@ -14,7 +14,7 @@ TileMill Server on Ubuntu 16.04
 * node 6.x
   * carto 0.17.x
   * pm2 2.4.x
-  * cartocc
+  * TileMill (GitHub)
 * openstreetmap-carto 3.1.0
 
 ### Requires
@@ -26,34 +26,18 @@ TileMill Server on Ubuntu 16.04
 ## Getting Started
 
 ```
-$ git clone git@github.com:miya0001/vagrant-tilemill.git
-$ cd vagrant-tilemill
-$ vagrant up
+$ git clone git@github.com:miya0001/docker-tilemill.git
+$ bash bin/build-docker.sh
 ```
 
-Please wait 20 minutes or so. :smile:
-
-* Tile Server: http://192.168.33.10/map/0/0/0.png
-* Kosmtik: http://192.168.33.10:20009/
+```
+$ bash bin/run-docker.sh
+```
 
 ###  PostgreSQL Database Account
 
 * User: vagrant
 * Password: vagrant
-
-## Automated Testing
-
-Run following after `vagrant up`.
-
-```
-$ bundle install --path vendor/bundle
-$ bundle exec rake spec
-```
-
-## Other Notes
-
-* Default data in the `provision/default.osm` contains only my hometown in Japan. :smile:
-* If you want to restart kosmtik, execute `pm2 restart kosmtik`.
 
 ## License
 
