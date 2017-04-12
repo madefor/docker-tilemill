@@ -16,6 +16,7 @@
       name: "{{ db.name }}"
       encoding: "{{ db.encoding }}"
       owner: ubuntu
+      template: template0
 
   - name: Run SQL `CREATE EXTENSION IF NOT EXISTS hstore;`
     become: yes
