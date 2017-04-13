@@ -1,7 +1,4 @@
 ---
-- hosts: all
-
-  tasks:
 
 - include: ./playbooks/middleware.yml
 - include: ./playbooks/openstreetmap-carto.yml

@@ -31,6 +31,7 @@
       - ruby
       - ttf-unifont
       - unzip
+      - monit
 
   # Node.js
   - name: Download Node.js PPM
@@ -93,3 +94,13 @@
     shell: "pm2 -f --name=tilemill start index.js"
     args:
       chdir: /usr/local/src/tilemill
+
+  - name: Setup monit for PostgreSQL
+    template:
+      src: templates/postgresql.monit
+      dest: "/etc/monit/conf.d/postgresql"
+
+  - name: Setup monit for TileMill
+    template:
+      src: templates/pm2.monit
+      dest: "/etc/monit/conf.d/pm2"

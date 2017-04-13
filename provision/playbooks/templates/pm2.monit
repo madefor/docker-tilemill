@@ -1,0 +1,3 @@
+check process node_app matching /usr/local/src/tilemill/index.js
+  start program = "/usr/bin/sudo -u ubuntu -i env bash -lc '/usr/bin/pm2 start /usr/local/src/tilemill/index.js'"
+  stop program  = "/usr/bin/sudo -u ubuntu -i env bash -lc '/usr/bin/pm2 stop /usr/local/src/tilemill/index.js'"

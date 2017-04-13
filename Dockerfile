@@ -39,5 +39,7 @@ RUN rm -rf /usr/share/doc && \
 COPY initctl_faker .
 RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl
 
+CMD ["/usr/bin/monit", "-I", "-c", "/etc/monit/monitrc"]
+
 EXPOSE 20009
 EXPOSE 20008
