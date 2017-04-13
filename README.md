@@ -25,14 +25,24 @@ TileMill Server on Ubuntu 16.04
 
 ## Getting Started
 
+Build a container.
+
 ```
 $ git clone git@github.com:miya0001/docker-tilemill.git
 $ bash bin/build-docker.sh
 ```
 
+Run container.
+
 ```
 $ bash bin/run-docker.sh
 ```
+
+Then visit http://127.0.0.1:20009/
+
+### How to cutomize database
+
+Replace `provision/default.osm` to your data.
 
 ###  PostgreSQL Database Account
 
