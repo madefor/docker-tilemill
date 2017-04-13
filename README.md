@@ -19,9 +19,7 @@ TileMill Server on Ubuntu 16.04
 
 ### Requires
 
-* Vagrant
-* VirtualBox
-* 2GB+ Memory
+* Docker
 
 ## Getting Started
 
