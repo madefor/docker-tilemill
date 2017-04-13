@@ -1,4 +1,4 @@
-# Vagrant TileMill
+# Docker TileMill
 
 TileMill Server on Ubuntu 16.04
 
