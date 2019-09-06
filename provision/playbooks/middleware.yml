@@ -8,30 +8,7 @@
   tasks:
 
   - name: Install common packages
-    apt: name={{ item }} state=latest update_cache=yes
-    with_items:
-      - autoconf
-      - curl
-      - fonts-noto-cjk
-      - fonts-noto-hinted
-      - fonts-noto-unhinted
-      - gdal-bin
-      - git
-      - jq
-      - libmapnik-dev
-      - libtool
-      - mapnik-utils
-      - osm2pgsql
-      - postgis
-      - postgresql
-      - postgresql-9.5-postgis-2.2
-      - postgresql-contrib
-      - python-pip
-      - python-psycopg2
-      - ruby
-      - ttf-unifont
-      - unzip
-      - monit
+    apt: name: ['autoconf', 'curl', 'fonts-noto-cjk', 'fonts-noto-hinted', 'fonts-noto-unhinted', 'gdal-bin', 'git', 'jq', 'libmapnik-dev', 'libtool', 'mapnik-utils', 'osm2pgsql', 'postgis', 'postgresql', 'postgresql-9.5-postgis-2.2', 'postgresql-contrib', 'python-pip', 'python-psycopg2', 'ruby', 'ttf-unifont', 'unzip', 'monit'] state=latest update_cache=yes
 
   # Node.js
   - name: Download Node.js PPM
