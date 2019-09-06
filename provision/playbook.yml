@@ -1,4 +1,4 @@
 ---
 
 - include: ./playbooks/middleware.yml
-- include: ./playbooks/openstreetmap-carto.yml
+#- include: ./playbooks/openstreetmap-carto.yml
