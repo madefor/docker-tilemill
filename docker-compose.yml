@@ -1,0 +1,24 @@
+version: '2.1'
+
+services:
+    tilemill:
+        restart: always
+        image: tilemill
+        network_mode: bridge
+        command: /usr/bin/monit -I
+        volumes:
+            - home-vol:/home/ubuntu
+        ports:
+            - 127.0.0.1:20009:20009
+            - 20008:20008
+        environment:
+
+            # Superuser setup
+#            - ADMIN_USER=${ADMIN_USER:-admin}
+#            - ADMIN_MAIL=${ADMIN_MAIL:-admin@example.com}
+#            - ADMIN_PASS=${ADMIN_PASS:-password}
+            - SITE_URL=${SITE_URL:-HTTP://myurl.com}
+#            - TIME_ZONE=${TIME_ZONE:-GMT+0}
+
+volumes:
+    home-vol:

@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 MAINTAINER "vccw-team"
 
-RUN locale-gen en_US.UTF-8
+#RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
@@ -10,6 +10,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y && \
     apt-get install apt-utils -y && \
+    apt-get install -y locales && \
+    locale-gen en_US.UTF-8 && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ansible/ansible && \
     apt-get update && \

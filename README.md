@@ -26,7 +26,7 @@ TileMill Server on Ubuntu 16.04
 Build a container.
 
 ```
-$ git clone git@github.com:miya0001/docker-tilemill.git
+$ git clone git@github.com:jucajuca/docker-tilemill.git
 $ bash bin/build-docker.sh
 ```
 
